@@ -3,6 +3,7 @@ import { z } from "zod";
 import { groupServicesByCategory } from "@/lib/services/groupServicesByCategory";
 
 const PK_PHONE_REGEX = /^(?:\+92|0)3\d{9}$/;
+const CNIC_REGEX = /^\d{5}-?\d{7}-?\d{1}$/; // 13 digits, dashes optional: 12345-1234567-1 or 1234512345671
 
 // const honeypot = {
 //   // Invisible to real users, only bots fill this. Tripping it short-circuits
@@ -50,9 +51,7 @@ const filerServiceValues = FILER_SERVICE_GROUPS.flatMap((g) =>
 ) as [string, ...string[]];
 
 // fast api sample payload shows a human-readable label ("Filer Registration"),
-// not the stable svc1–svc16 id. This map bridges that gap so the frontend
-// can still validate against the stable id while sending what his endpoint
-// currently expects. Flag to BackendDev this is fragile — a label rename in
+// not the stable svc1–svc16 id. this is fragile — a label rename in
 // appData.tsx silently stops matching whatever his DB has stored.
 
 const serviceLabelById = new Map(
@@ -63,24 +62,28 @@ export function getServiceLabelById(id: string): string {
   return serviceLabelById.get(id) ?? id;
 }
 
-export const becomeFilerFormSchema = z.object({
+export const becomeFilerStep1Schema = z.object({
   username: z.string().trim().min(2, "Enter your full name").max(100),
   phone: z
     .string()
     .trim()
     .regex(PK_PHONE_REGEX, "Enter a valid Pakistani number, e.g. 03041110555"),
-  email: z
-    .string()
-    .trim()
-    .email("Enter a valid email address")
-    .optional()
-    .or(z.literal("")),
-  // service: z.enum(filerServiceValues, {
-  service_type: z.enum(filerServiceValues, {
-    message: "Select a service"
-  }),
-  city: z.string().trim().min(5, "Enter your address").max(300),
-  // ...honeypot,
+  city: z.string().trim().min(2, "Enter your city").max(100),
 });
 
-export type BecomeFilerFormValues = z.infer<typeof becomeFilerFormSchema>;
+export type BecomeFilerStep1Values = z.infer<typeof becomeFilerStep1Schema>;
+
+export const becomeFilerStep2Schema = z.object({
+  cnic: z
+    .string()
+    .trim()
+    .regex(CNIC_REGEX, "Enter a valid CNIC, e.g. 12345-1234567-1"),
+  service_type: z.enum(filerServiceValues, {
+    message: "Select a service",
+  }),
+  // Required per BackendDev's step2 schema (no nullable/optional marker).
+  // Was optional on the old single-step form — flag if that's not intended.
+  email: z.string().trim().email("Enter a valid email address"),
+});
+
+export type BecomeFilerStep2Values = z.infer<typeof becomeFilerStep2Schema>;
