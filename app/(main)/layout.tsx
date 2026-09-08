@@ -1,4 +1,4 @@
-// app/(main)/layout.tsx — new file
+// app/(main)/layout.tsx
 import Header from "@/components/common/header/Header";
 import Footer from "@/components/common/footer/Footer";
 import TaxCalculatorDrawer from "@/components/home/calculator/TaxCalculatorDrawer";

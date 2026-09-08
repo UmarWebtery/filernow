@@ -2,7 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import Button, { IconSmallBtn, LinkBtn } from "@/components/common/btns/Button"
+import { IconSmallBtn, LinkBtn } from "@/components/common/btns/Button"
 import SectionContainer from "../section/SectionContainer"
 import Image from "next/image"
 import { FileBadge, Menu, UserRound } from "lucide-react"
@@ -14,9 +14,12 @@ import { useStickyHeader } from "@/hooks/useStickyHeader"
 import { useAuthDrawer } from "@/context/AuthDrawerContext"
 import MobileMenuDrawer from "./mobileMenu/MobileMenuDrawer"
 
-type Props = {}
+type Props = {
+    logoUrl?: string,
+    siteName?: string,
+}
 
-const MenuBar = (props: Props) => {
+const MenuBar = ({ logoUrl = '/assets/headerLogo.svg', siteName }: Props) => {
     const { isScrolled } = useStickyHeader(".menubar")
     const { openAuthDrawer } = useAuthDrawer()
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -31,7 +34,14 @@ const MenuBar = (props: Props) => {
         >
             <div className="flex justify-between items-center">
                 <Link href={'/'} className="hover:-translate-y-0.5 default-transition">
-                    <Image src={'/assets/headerLogo.svg'} alt="header_logo" width={58} height={58} priority className="-ml-1" />
+                    <Image
+                        src={logoUrl}
+                        alt={siteName ? `${siteName} Logo` : "header_logo"}
+                        width={58}
+                        height={58}
+                        priority
+                        className="-ml-1"
+                    />
                 </Link>
 
                 <DeskMenu />

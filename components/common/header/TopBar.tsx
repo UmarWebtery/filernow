@@ -3,9 +3,14 @@ import SectionContainer from "../section/SectionContainer"
 import { IoCallOutline, IoMailUnreadOutline } from "react-icons/io5"
 import TopBarContactItem from "@/components/ui-custom/TopBarContactItem"
 
-type Props = {}
+type Props = {
+  email?: string,
+}
 
-const TopBar = (props: Props) => {
+const TopBar = ({ email }: Props) => {
+
+  const displayEmail = email || "support@filernow.com"
+
   return (
     <SectionContainer
       sectionClass="bg-text-darkx bg-foreground"
@@ -21,7 +26,8 @@ const TopBar = (props: Props) => {
         <div className="hidden md:flex items-center gap-6">
           <TopBarContactItem
             icon={<IoMailUnreadOutline size={15} />}
-            label="support@filernow.com"
+            // label="support@filernow.com"
+            label={displayEmail}
             href="mailto:support@filernow.com"
           />
           <TopBarContactItem

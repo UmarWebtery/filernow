@@ -1,9 +1,10 @@
-import { FaLinkedinIn, FaFacebookF, FaInstagram, FaYoutube, FaTwitter } from "react-icons/fa"
+import { FaLinkedinIn, FaFacebookF, FaInstagram, FaYoutube, FaTwitter, FaWhatsapp } from "react-icons/fa"
 import { ShieldCheck, Users, Clock, Scale, Heart, SearchCheck, Calculator, LucideIcon, House, Info, StickyNotePlus, Headset } from "lucide-react"
 import { FileText, Receipt, ArrowLeftRight, Copyright, IdCard, Briefcase, ShoppingCart, Calendar } from "lucide-react"
 import { IWaveStepItem } from "@/lib/types/wave-steps/types";
 import { TbReceiptTax } from "react-icons/tb";
 import { IconType } from "react-icons";
+import { ISocialMedia } from "@/lib/types/site-identity/site-identity";
 
 // Home menu data
 export interface IMenuDataItem {
@@ -74,6 +75,16 @@ export const footerSocialLinks: IFooterSocialLinksItem[] = [
         icon: <FaTwitter size={20} />,
     }
 ];
+
+// replace footerSocialLinks with an icon map
+export const socialIconMap: Record<keyof ISocialMedia, React.ReactNode> = {
+    twitter: <FaTwitter size={16} />,
+    linkedin: <FaLinkedinIn size={16} />,
+    instagram: <FaInstagram size={16} />,
+    facebook: <FaFacebookF size={16} />,
+    youtube: <FaYoutube size={16} />,
+    whatsapp: <FaWhatsapp size={16} />,
+};
 
 export interface IFooterLinkItem {
     id: string,
