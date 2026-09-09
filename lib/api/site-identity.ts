@@ -1,14 +1,6 @@
 import { cache } from "react";
 import { ISiteIdentity, ISiteIdentityRaw, mapSiteIdentity } from "../types/site-identity/site-identity";
 
-const FASTAPI_URL = process.env.FASTAPI_INTERNAL_URL;
-
-if (!FASTAPI_URL) {
-  throw new Error(
-    "[site-identity] FASTAPI_INTERNAL_URL is not set — check .env.local"
-  );
-}
-
 // Hard fallback so the site never renders broken if the CMS is down —
 // same defensive pattern as blogs.ts's mock fallback.
 const FALLBACK_SITE_IDENTITY: ISiteIdentity = {
@@ -33,6 +25,13 @@ const FALLBACK_SITE_IDENTITY: ISiteIdentity = {
  * via revalidateTag("site-identity").
  */
 export const getSiteIdentity = cache(async (): Promise<ISiteIdentity> => {
+  const FASTAPI_URL = process.env.FASTAPI_INTERNAL_URL;
+
+  if (!FASTAPI_URL) {
+    console.warn("[site-identity] FASTAPI_INTERNAL_URL is not set — using fallback");
+    return FALLBACK_SITE_IDENTITY;
+  }
+
   try {
     const res = await fetch(`${FASTAPI_URL}/api/admin/site-identity`, {
       headers: {
