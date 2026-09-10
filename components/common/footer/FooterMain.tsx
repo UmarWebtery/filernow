@@ -6,12 +6,17 @@ import TopBarContactItem from "@/components/ui-custom/TopBarContactItem"
 import { FiMessageCircle } from "react-icons/fi"
 import { IoCallOutline, IoMailUnreadOutline } from "react-icons/io5"
 import NewsletterForm from "./NewsletterForm"
-import Image from "next/image"
+
 import RevealOnScroll from "@/components/ui-custom/RevealOnScroll"
+import { ISocialMedia } from "@/lib/types/site-identity/site-identity"
 
-type Props = {}
+type Props = {
+    logoUrl?: string;
+    siteName?: string;
+    socialMedia?: ISocialMedia;
+}
 
-const FooterMain = (props: Props) => {
+const FooterMain = ({ logoUrl, siteName, socialMedia }: Props) => {
     return (
         <SectionContainer
             sectionClass="relative"
@@ -33,7 +38,8 @@ const FooterMain = (props: Props) => {
                 className="relative z-50x grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[350px_minmax(150px,_1fr)_minmax(150px,_1fr)_1fr] gap-6 md:gap-12"
             >
                 <RevealOnScroll delay={0}>
-                    <FooterDescription />
+                    <FooterDescription logoUrl={logoUrl} siteName={siteName} socialMedia={socialMedia} />
+
                 </RevealOnScroll>
 
                 <RevealOnScroll delay={100}>

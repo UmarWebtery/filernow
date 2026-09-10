@@ -1,21 +1,28 @@
+// components/common/footer/FooterDescription.tsx
 "use client"
 
 import { AnchorBtn } from '@/components/common/btns/Button';
-import { footerSocialLinks } from '@/data/appData';
+import { socialIconMap } from '@/data/appData';
+import { ISocialMedia } from '@/lib/types/site-identity/site-identity';
 import Image from 'next/image';
 import Link from 'next/link';
 
-type Props = {}
+type Props = {
+    logoUrl?: string;
+    siteName?: string;
+    socialMedia?: ISocialMedia;
+}
 
-const FooterDescription = (props: Props) => {
+const FooterDescription = ({ logoUrl, siteName, socialMedia = {} }: Props) => {
+    const activeSocials = (Object.keys(socialMedia) as Array<keyof ISocialMedia>)
+        .filter((key) => socialMedia[key]);
+
     return (
         <div className="flex flex-col gap-5">
-            <Link
-                href={'/'}
-            >
+            <Link href={'/'}>
                 <Image
-                    src={'/assets/headerLogo.svg'}
-                    alt='footerLogo'
+                    src={logoUrl || '/assets/headerLogo.svg'}
+                    alt={siteName ? `${siteName} footer logo` : 'footerLogo'}
                     width={58}
                     height={58}
                     className='hover:-translate-y-0.5 default-transition'
@@ -31,11 +38,11 @@ const FooterDescription = (props: Props) => {
             </p>
 
             <div className="flex gap-3">
-                {footerSocialLinks.map((social) => (
+                {activeSocials.map((key) => (
                     <AnchorBtn
-                        key={social.id}
-                        href={social.link}
-                        icon={social.icon}
+                        key={key}
+                        href={socialMedia[key]!}
+                        icon={socialIconMap[key]}
                         variant='primary-light'
                         className='border-transparent p-2.5 hover:-translate-y-0.5'
                     />
